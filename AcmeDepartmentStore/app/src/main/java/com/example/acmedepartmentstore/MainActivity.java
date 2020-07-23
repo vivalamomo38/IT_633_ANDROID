@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void fadeOutProgressDialog(){
         mBinding.progressBar.animate().alpha(0f).setDuration(200).start();
+        mBinding.imageView.animate().alpha(0f).setDuration(100).start();
     }
 
     private void delayedStartNextActivity(){
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
 
             }
