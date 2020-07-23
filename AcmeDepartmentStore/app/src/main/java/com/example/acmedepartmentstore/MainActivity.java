@@ -1,8 +1,5 @@
 package com.example.acmedepartmentstore;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
@@ -15,10 +12,11 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+
 import com.example.acmedepartmentstore.databinding.ActivityMainBinding;
 import com.example.acmedepartmentstore.ui.login.LoginActivity;
-
-import java.util.concurrent.Delayed;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding mBinding;
@@ -128,6 +126,13 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
+                // Fix me -- This is a workaround for the MainActivity not being on the stack when using up navigation
+                // -- This code adds main activity back to the stack before calling the next Intent
+
+                startActivity(new Intent(MainActivity.this, MainActivity.class));
+
+                // Intent to run the new activity
 
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
 
