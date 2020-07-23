@@ -27,18 +27,28 @@ public class MainActivity extends AppCompatActivity {
         mBinding= DataBindingUtil.setContentView(this,R.layout.activity_main);
     }
 
-    public void load(View view){
+    public void loadLogin(View view){
+
+        // Call private method to animateGuestButtonWidth and send user to Home Activity
+            animateButtonWidth(1);
+            fadeOutTextAndSetProgressDialog();
+            nextAction(1);
 
 
-        //Call private method animateButtonWidth
-        animateButtonWidth();
+        }
+    public void guestLogin(View view){
+
+        // Call private method to animateGuestButtonWidth and send user to Home Activity
+        animateButtonWidth(0);
         fadeOutTextAndSetProgressDialog();
-        nextAction();
+        nextAction(0);
+
 
     }
 
-    private void animateButtonWidth(){
-
+    private void animateButtonWidth(int button){
+        if(button==1){
+            //Code to execute login button animation
         ValueAnimator anim = ValueAnimator.ofInt(mBinding.signInBtn.getMeasuredWidth());
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -48,16 +58,47 @@ public class MainActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams layoutParams = mBinding.signInBtn.getLayoutParams();
                 layoutParams.width=value;
                 mBinding.signInBtn.requestLayout();
+                mBinding.guestBtn.setVisibility(View.INVISIBLE);
             }
         });
 
 
         anim.setDuration(250);
-        anim.start();
+        anim.start();}else{
+            // Code to execute guest button login
+            ValueAnimator anim = ValueAnimator.ofInt(mBinding.guestBtn.getMeasuredWidth());
+            anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+
+                    int value = (Integer) animation.getAnimatedValue();
+                    ViewGroup.LayoutParams layoutParams = mBinding.guestBtn.getLayoutParams();
+                    layoutParams.width=value;
+                    mBinding.guestBtn.requestLayout();
+                    mBinding.guestBtn.setVisibility(View.INVISIBLE);
+                    mBinding.signInBtn.setVisibility(View.VISIBLE);
+                }
+            });
+
+
+            anim.setDuration(250);
+            anim.start();
+
+
+
+        };
     }
 
     private void fadeOutTextAndSetProgressDialog(){
         mBinding.signInTxt.animate().alpha(0f).setDuration(250).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                // When Text is GONE call the progress Dialog
+                showProgressDialog();
+            }
+        }).start();
+        mBinding.guestTxt.animate().alpha(0f).setDuration(250).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
@@ -76,18 +117,28 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void nextAction(){
+    private void nextAction(int button){
+if(button==1) {
+    new Handler().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+            revealButton();
+            fadeOutProgressDialog();
+            delayedStartNextActivity(1);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                revealButton();
-                fadeOutProgressDialog();
-                delayedStartNextActivity();
+        }
+    }, 2000);
+}else if (button==0){ new Handler().postDelayed(new Runnable() {
+    @Override
+    public void run() {
+        revealButton();
+        fadeOutProgressDialog();
+        delayedStartNextActivity(0);
 
-            }
-        }, 2000);
     }
+}, 2000);
+
+}    }
 
     private void revealButton(){
         mBinding.signInBtn.setElevation(0f);
@@ -102,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         float radius = Math.max(x,y) * 1.2f;
 
         Animator reveal = ViewAnimationUtils.createCircularReveal(mBinding.revealView,startX,startY,getFinalWidth(),radius);
-        reveal.setDuration(350);
+        reveal.setDuration(750);
         reveal.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -121,8 +172,8 @@ public class MainActivity extends AppCompatActivity {
         mBinding.imageView.animate().alpha(0f).setDuration(100).start();
     }
 
-    private void delayedStartNextActivity(){
-
+    private void delayedStartNextActivity(int button){
+if(button==1){
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -137,7 +188,24 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
 
             }
-        },100);
+        },100);}
+else if(button==0){
+    new Handler().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+
+            // Fix me -- This is a workaround for the MainActivity not being on the stack when using up navigation
+            // -- This code adds main activity back to the stack before calling the next Intent
+
+            startActivity(new Intent(MainActivity.this, MainActivity.class));
+
+            // Intent to run the new activity
+
+            startActivity(new Intent(MainActivity.this, Home.class));
+
+        }
+    },100);
+}
 
     }
 
