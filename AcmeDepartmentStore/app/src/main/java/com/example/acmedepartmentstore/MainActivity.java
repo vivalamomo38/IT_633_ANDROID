@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
@@ -25,12 +26,21 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        // Initialize Firebase Auth
+        // Initialize Firebase Instance
         mAuth = FirebaseAuth.getInstance();
 
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        // UNDO THIS CODEEEE
+        // THIS CODE IS FOR DEBUG PURPOSE ONLY
+        // ADDED 7.24 to sign user out because signout doesn't exist yet
+        try{
+            mAuth.signOut();
+            Log.i("Logout","Logout Processed");
+        } catch (Exception e){
+            Log.i("Logout","Logout Failed");
+        }
         // Test to see if currentUser is null else go to home
 
         if(currentUser !=null){
