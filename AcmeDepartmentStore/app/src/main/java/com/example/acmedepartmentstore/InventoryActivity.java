@@ -1,23 +1,38 @@
 package com.example.acmedepartmentstore;
 
+import android.content.res.Resources;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.acmedepartmentstore.data.model.Item;
 import com.google.android.material.navigation.NavigationView;
 
-public class InventoryActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import java.util.ArrayList;
+import java.util.List;
 
+public class InventoryActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    // Declare Nav bar variables
     private Toolbar toolBar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
+    // Declare recycler view variables
+    private List<Item> itemList;
+    private ItemAdapter itemAdapter;
+    private RecyclerView recyclerView;
 
 
 
@@ -42,6 +57,61 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        // Create Recycler View widget
+        recyclerView = findViewById(R.id.inventory_recycler_view);
+
+        itemList = new ArrayList<>();
+        itemAdapter = new ItemAdapter(this, itemList);
+
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2);
+        recyclerView.setLayoutManager(layoutManager);
+
+        //Item Decoration:
+
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2,dpToPx(10),true));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(itemAdapter);
+
+        // prepare cards
+        InsertDataIntoCards();
+
+    }
+    private void InsertDataIntoCards() {
+        // Add Card Data and display
+
+        int[] itemCovers = new int[]{
+                R.drawable.ic_baseline_star_24,
+                R.drawable.ic_baseline_star_24,
+                R.drawable.ic_baseline_star_24,
+                R.drawable.ic_baseline_star_24,
+                R.drawable.ic_baseline_star_24,
+                R.drawable.ic_baseline_star_24,
+                R.drawable.ic_baseline_star_24,
+        };
+
+        Item a = new Item("Screws", 100, 0.99, "3/4 inch screw",itemCovers[0]);
+        itemList.add(a);
+
+         a = new Item("Nails", 100, 0.63, "3/4 inch nails",itemCovers[0]);
+        itemList.add(a);
+
+        a = new Item("White Paint", 1, 17.99, "1 Gl White Paint",itemCovers[0]);
+        itemList.add(a);
+
+        a = new Item("Paint Brush", 3, 7.99, "Premium 3 inch width paint brush",itemCovers[0]);
+        itemList.add(a);
+
+        a = new Item("Gorilla Glue", 3, 3.99, "1oz Tube Gorilla Glue",itemCovers[0]);
+        itemList.add(a);
+
+        a = new Item("Phillips Screw Driver", 100, 22.99, "Stanley Phillips Screw Driver",itemCovers[0]);
+        itemList.add(a);
+
+        //Notify data set changed
+        itemAdapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -77,5 +147,56 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    private class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+
+        private int spanCount;
+        private int spacing;
+        private boolean includeEdge;
+
+        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
+            this.spanCount = spanCount;
+            this.spacing = spacing;
+            this.includeEdge = includeEdge;
+        }
+
+
+
+        @Override
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+
+            int position = parent.getChildAdapterPosition(view);
+            int column = position % spanCount;
+
+            if (includeEdge){
+                outRect.left = spacing -column /spanCount;
+                outRect.right = (column+1) * spacing;
+
+                if (position <spanCount){// Top Edge
+                    outRect.top = spacing;
+                }
+                outRect.bottom = spacing; //Item Bottom
+
+            } else {
+
+                outRect.left = column * spacing /spanCount;
+                outRect.right = spacing - (column +1 ) * spacing / spanCount;
+
+                if (position >= spanCount){
+                    outRect.top = spacing;
+                }
+
+
+            }
+
+
+        }
+    }
+
+    // Method to convert DP to PX
+    private int dpToPx(int dp){
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dp,r.getDisplayMetrics()));
     }
 }
