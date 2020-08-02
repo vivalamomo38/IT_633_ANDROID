@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        // UNDO THIS CODEEEE
+        // UNDO THIS CODE
         // THIS CODE IS FOR DEBUG PURPOSE ONLY
-        // ADDED 7.24 to sign user out because signout doesn't exist yet
+        // ADDED 7.24 to sign user out because sign-out doesn't exist yet
         try{
             mAuth.signOut();
             Log.i("Logout","Logout Processed");

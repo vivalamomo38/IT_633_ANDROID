@@ -1,6 +1,5 @@
 package com.example.acmedepartmentstore;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -13,17 +12,19 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class InventoryActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private Toolbar toolBar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_inventory);
 
         toolBar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolBar);
@@ -50,7 +51,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         switch(menuItem.getItemId()) {
             case R.id.nav_inventory:
                 Log.i("Inventory", "nav inventory selected");
-                startActivity(new Intent(Home.this, InventoryActivity.class));
                 break;
             case R.id.nav_search:
                 Log.i("Search", "nav search selected");
