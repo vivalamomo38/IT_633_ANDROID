@@ -82,8 +82,7 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
         // Add Card Data and display
 
         int[] itemCovers = new int[]{
-                R.drawable.ic_baseline_star_24,
-                R.drawable.ic_baseline_star_24,
+                R.drawable.typeasquareflat,
                 R.drawable.ic_baseline_star_24,
                 R.drawable.ic_baseline_star_24,
                 R.drawable.ic_baseline_star_24,
@@ -94,19 +93,19 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
         Item a = new Item("Screws", 100, 0.99, "3/4 inch screw",itemCovers[0]);
         itemList.add(a);
 
-         a = new Item("Nails", 100, 0.63, "3/4 inch nails",itemCovers[0]);
+         a = new Item("Nails", 100, 0.63, "3/4 inch nails",itemCovers[1]);
         itemList.add(a);
 
-        a = new Item("White Paint", 1, 17.99, "1 Gl White Paint",itemCovers[0]);
+        a = new Item("White Paint", 1, 17.99, "1 Gl White Paint",itemCovers[2]);
         itemList.add(a);
 
-        a = new Item("Paint Brush", 3, 7.99, "Premium 3 inch width paint brush",itemCovers[0]);
+        a = new Item("Paint Brush", 3, 7.99, "Premium 3 inch width paint brush",itemCovers[3]);
         itemList.add(a);
 
-        a = new Item("Gorilla Glue", 3, 3.99, "1oz Tube Gorilla Glue",itemCovers[0]);
+        a = new Item("Gorilla Glue", 3, 3.99, "1oz Tube Gorilla Glue",itemCovers[4]);
         itemList.add(a);
 
-        a = new Item("Phillips Screw Driver", 100, 22.99, "Stanley Phillips Screw Driver",itemCovers[0]);
+        a = new Item("Phillips Screw Driver", 100, 22.99, "Stanley Phillips Screw Driver",itemCovers[5]);
         itemList.add(a);
 
         //Notify data set changed
