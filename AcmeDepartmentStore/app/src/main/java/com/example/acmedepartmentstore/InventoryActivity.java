@@ -82,8 +82,8 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
         // Add Card Data and display
 
         int[] itemCovers = new int[]{
-                R.drawable.typeasquareflat,
-                R.drawable.nail_3_4,
+                R.drawable.screw,
+                R.drawable.finish_nail,
                 R.drawable.behr_interior_semi_gloss,
                 R.drawable.paint_brush,
                 R.drawable.gg_glue,
