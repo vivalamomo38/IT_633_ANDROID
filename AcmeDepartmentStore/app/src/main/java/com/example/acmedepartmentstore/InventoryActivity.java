@@ -83,26 +83,26 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
 
         int[] itemCovers = new int[]{
                 R.drawable.typeasquareflat,
-                R.drawable.ic_baseline_star_24,
-                R.drawable.ic_baseline_star_24,
-                R.drawable.ic_baseline_star_24,
-                R.drawable.ic_baseline_star_24,
-                R.drawable.ic_baseline_star_24,
+                R.drawable.nail_3_4,
+                R.drawable.behr_interior_semi_gloss,
+                R.drawable.paint_brush,
+                R.drawable.gg_glue,
+                R.drawable.phillips_head_screwdriver,
         };
 
         Item a = new Item("Screws", 100, 0.99, "3/4 inch screw",itemCovers[0]);
         itemList.add(a);
 
-         a = new Item("Nails", 100, 0.63, "3/4 inch nails",itemCovers[1]);
+         a = new Item("Nails", 1500, 0.63, "3/4 inch nails",itemCovers[1]);
         itemList.add(a);
 
-        a = new Item("White Paint", 1, 17.99, "1 Gl White Paint",itemCovers[2]);
+        a = new Item("Behr Interior Semi-Gloss (White)", 1, 17.99, "1 Gl White Paint",itemCovers[2]);
         itemList.add(a);
 
-        a = new Item("Paint Brush", 3, 7.99, "Premium 3 inch width paint brush",itemCovers[3]);
+        a = new Item("Krause & Becker PRO - Paint Brush", 3, 7.99, "Premium 3 inch width paint brush",itemCovers[3]);
         itemList.add(a);
 
-        a = new Item("Gorilla Glue", 3, 3.99, "1oz Tube Gorilla Glue",itemCovers[4]);
+        a = new Item("Gorilla Glue", 3, 3.99, "1.75 fl. oz. Tube Gorilla Glue",itemCovers[4]);
         itemList.add(a);
 
         a = new Item("Phillips Screw Driver", 100, 22.99, "Stanley Phillips Screw Driver",itemCovers[5]);
