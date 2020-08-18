@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.acmedepartmentstore.data.model.Cart;
 import com.example.acmedepartmentstore.data.model.Item;
 import com.google.android.material.navigation.NavigationView;
 
@@ -28,6 +29,7 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
     private Toolbar toolBar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private Cart sessionCart;
 
     // Declare recycler view variables
     private List<Item> itemList;

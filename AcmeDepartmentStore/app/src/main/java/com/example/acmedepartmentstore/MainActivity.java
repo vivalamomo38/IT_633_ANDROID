@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -55,12 +56,21 @@ public class MainActivity extends AppCompatActivity {
         mBinding= DataBindingUtil.setContentView(this,R.layout.activity_main);
     }
     public void guestLogin(View view){
+       // Surround guest login with Try catch to ensure successful login
 
+        try{
+        mAuth.signInWithEmailAndPassword("IT_633_Guest@snhu.edu","Guest123!@");
         // Call private method to animateGuestButtonWidth and send user to Home Activity
         animateButtonWidth(0);
         fadeOutTextAndSetProgressDialog();
         nextAction(0);
+        Log.i("Login Status","Succeeded for user" );
 
+        } catch (Exception e) {
+
+            // Inform User that guest login failed
+            Toast.makeText(MainActivity.this, "Something went wrong? Please try again", Toast.LENGTH_LONG).show();
+        }
 
     }
 
