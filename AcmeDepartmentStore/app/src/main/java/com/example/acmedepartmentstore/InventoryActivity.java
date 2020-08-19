@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.acmedepartmentstore.data.model.Inventory;
 import com.example.acmedepartmentstore.data.model.Item;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,16 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
         navigationView.setNavigationItemSelectedListener(this);
 
 
+        // Test that intent extras exist
+        Bundle extras = getIntent().getExtras();
+        String userName;
+
+        if (extras != null) {
+            userName = extras.getString("name");
+            Log.i("Extras","Extras were passed");
+            // and get whatever type user account id is
+        } else {Log.i("Extras","No Extras were passed");}
+
         // Create Recycler View widget
         recyclerView = findViewById(R.id.inventory_recycler_view);
 
@@ -74,13 +85,13 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2);
         recyclerView.setLayoutManager(layoutManager);
 
-        //Item Decoration:
+        //Item Card Decoration:
 
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2,dpToPx(10),true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(itemAdapter);
 
-        // prepare cards
+        // prepare item cards
         InsertDataIntoCards();
 
     }
@@ -95,6 +106,7 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
                 R.drawable.gg_glue,
                 R.drawable.phillips_head_screwdriver,
         };
+        //Establish mock data and add to the itemList for testing
 
         Item a = new Item("Screws", 100, 0.99, "3/4 inch screw",itemCovers[0]);
         itemList.add(a);
@@ -118,7 +130,7 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
         itemAdapter.notifyDataSetChanged();
 
     }
-
+    // Navigation Bar Selection Logic
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
@@ -144,6 +156,10 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
                 break;
             case R.id.nav_logout:
                 Log.i("Logout", "nav logout selected");
+                try{
+                   FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                    mAuth.signOut();
+                }catch(Exception e){Log.i("Status","No user to sign out");}
                 Intent signOutIntent = new Intent(this, MainActivity.class);
                 startActivity(signOutIntent);
                 break;

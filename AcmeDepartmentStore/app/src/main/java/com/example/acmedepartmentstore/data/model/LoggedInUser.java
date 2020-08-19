@@ -8,11 +8,13 @@ public class LoggedInUser {
     private String uID;
     private String firstName;
     private String lastName;
+    private Inventory userInventory;
 
-    public LoggedInUser(String userId, String displayName) {
-        this.uID = userId;
+    public LoggedInUser(String uID, String firstName, String lastName, Inventory userInventory) {
+        this.uID = uID;
         this.firstName = firstName;
-        this.lastName =  lastName;
+        this.lastName = lastName;
+        this.userInventory = userInventory;
     }
 
     public String getuID() {
@@ -24,4 +26,24 @@ public class LoggedInUser {
     }
 
     public String getLastName(){ return lastName;}
-}
+
+    public Inventory getUserInventory() { return getUserInventory();}
+
+    public void setuID(String uID) {
+        this.uID = uID;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setUserInventory(Inventory userInventory) {
+        this.userInventory = userInventory;
+    }
+
+
+    }

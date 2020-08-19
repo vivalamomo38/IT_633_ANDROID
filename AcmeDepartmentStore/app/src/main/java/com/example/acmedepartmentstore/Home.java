@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.acmedepartmentstore.data.model.LoggedInUser;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,9 +28,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     private NavigationView navigationView;
     private FirebaseAuth mAuth;
     private FirebaseUser sessionUser;
-    private String sessionUserName;
+    private String sessionFirstName;
+    private String sessionLastName;
     private String sessionUserID;
     private FirebaseFirestore _fireStore;
+    private LoggedInUser loggedInUser;
     private DocumentReference userDocument;
 
 
@@ -55,15 +58,17 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     if (documentSnapshot!=null) {
-                        sessionUserName = documentSnapshot.getString("firstName");
-                        Log.i("Status","Current user is: "+ sessionUserName);
-                        TextView navHeaderTextView = findViewById(R.id.nav_header_username);
-                        navHeaderTextView.setText(sessionUserName);
 
+                        sessionFirstName = documentSnapshot.getString("firstName");
+                        sessionLastName = documentSnapshot.getString("lastName");
+
+                        Log.i("Status","Session user is: "+ sessionFirstName +" "+ sessionLastName);
+
+                        TextView navHeaderTextView = findViewById(R.id.nav_header_username);
+                        navHeaderTextView.setText(sessionFirstName);
 
                     } else {
-                        sessionUserName ="Not Found";
-                        Log.d("Status", "else case");
+                        Log.d("Status", "Failed to get user info");
                         // Toast.makeText(this, "Document Does Not exists", Toast.LENGTH_SHORT).show();
                     }
 
@@ -106,6 +111,9 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.nav_inventory:
                 Log.i("Inventory", "nav inventory selected");
                 Intent inventoryIntent = new Intent(Home.this, InventoryActivity.class);
+                inventoryIntent.putExtra("LoggedInUser.firstName", sessionFirstName);
+                inventoryIntent.putExtra("LoggedInUser.lastName", sessionFirstName);
+                inventoryIntent.putExtra("LoggedInUser.uID", sessionUserID);
                 startActivity(inventoryIntent);
                 break;
             case R.id.nav_search:
@@ -124,6 +132,12 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 Log.i("Settings", "nav settings selected");
                 break;
             case R.id.nav_logout:
+                // Sign user out and return to MainActivity
+                Log.i("Logout", "nav logout selected");
+                try{
+                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                    mAuth.signOut();
+                }catch(Exception e){Log.i("Status","No user to sign out");}
                 Intent signOutIntent = new Intent(this, MainActivity.class);
                 startActivity(signOutIntent);
                 Log.i("Status","Logout Selected");

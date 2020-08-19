@@ -52,7 +52,7 @@
 
                 <TextView
                     android:id="@+id/addItemInventory"
-                    android:layout_width="130dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
@@ -62,7 +62,6 @@
                     android:drawableEnd="@drawable/ic_add_24px"
                     android:fontFamily="sans-serif-medium"
                     android:onClick="addItemDialog"
-                    android:text="@string/add_item_inventory"
                     android:textAlignment="center"
                     android:textColorLink="#FFFFFF"
                     android:textSize="24sp"
