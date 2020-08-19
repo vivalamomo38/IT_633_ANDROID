@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
+    app:layout_constraintCircleRadius="@dimen/card_corner_radius"
     tools:context=".InventoryActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,30 +32,54 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/main_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"/>
+            android:layout_height="wrap_content"
+            >
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/main_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/colorPrimary" />
+
+
+                <TextView
+                    android:id="@+id/addItemInventory"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="32dp"
+                    android:background="@drawable/add_item_btn"
+                    android:drawableEnd="@drawable/ic_add_24px"
+                    android:fontFamily="sans-serif-medium"
+                    android:onClick="addItemDialog"
+                    android:text="@string/add_item_inventory"
+                    android:textAlignment="center"
+                    android:textColorLink="#FFFFFF"
+                    android:textSize="24sp"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </RelativeLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
     <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:menu="@menu/nav_menu"
-        android:id="@+id/nav_view"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header_layout"
-        />
-
+        app:menu="@menu/nav_menu" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -1,15 +1,19 @@
 package com.example.acmedepartmentstore;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -17,7 +21,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.acmedepartmentstore.data.model.Cart;
+import com.example.acmedepartmentstore.data.model.Inventory;
 import com.example.acmedepartmentstore.data.model.Item;
 import com.google.android.material.navigation.NavigationView;
 
@@ -29,7 +33,7 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
     private Toolbar toolBar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private Cart sessionCart;
+    private Inventory sessionInventory;
 
     // Declare recycler view variables
     private List<Item> itemList;
@@ -140,6 +144,8 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
                 break;
             case R.id.nav_logout:
                 Log.i("Logout", "nav logout selected");
+                Intent signOutIntent = new Intent(this, MainActivity.class);
+                startActivity(signOutIntent);
                 break;
         }
         return false;
@@ -200,4 +206,38 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dp,r.getDisplayMetrics()));
     }
+
+    public void addItemDialog(View view){
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // 2. Get the layout inflater to inflate the custom view
+
+        LayoutInflater inflater = getLayoutInflater();
+
+        // 3. Inflate the layout
+
+        builder.setView(inflater.inflate(R.layout.add_item_dialog, null))
+                // Add action buttons
+                .setPositiveButton(R.string.prompt_email, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        // sign in the user ...
+                    }
+                })
+                .setNegativeButton(R.string.prompt_password, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                       //actions for negative
+                    }
+                });
+
+
+
+// 3. Get the <code><a href="/reference/android/app/AlertDialog.html">AlertDialog</a></code> from <code><a href="/reference/android/app/AlertDialog.Builder.html#create()">create()</a></code>
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+
+    }
+
 }

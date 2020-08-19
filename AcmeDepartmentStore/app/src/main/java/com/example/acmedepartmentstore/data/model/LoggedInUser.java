@@ -5,19 +5,23 @@ package com.example.acmedepartmentstore.data.model;
  */
 public class LoggedInUser {
 
-    private String userId;
-    private String displayName;
+    private String uID;
+    private String firstName;
+    private String lastName;
 
     public LoggedInUser(String userId, String displayName) {
-        this.userId = userId;
-        this.displayName = displayName;
+        this.uID = userId;
+        this.firstName = firstName;
+        this.lastName =  lastName;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getuID() {
+        return uID;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getFirstName() {
+        return firstName;
     }
+
+    public String getLastName(){ return lastName;}
 }

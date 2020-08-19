@@ -105,7 +105,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         switch(menuItem.getItemId()) {
             case R.id.nav_inventory:
                 Log.i("Inventory", "nav inventory selected");
-                startActivity(new Intent(Home.this, InventoryActivity.class));
+                Intent inventoryIntent = new Intent(Home.this, InventoryActivity.class);
+                startActivity(inventoryIntent);
                 break;
             case R.id.nav_search:
                 Log.i("Search", "nav search selected");
@@ -123,7 +124,9 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 Log.i("Settings", "nav settings selected");
                 break;
             case R.id.nav_logout:
-                Log.i("Logout", "nav logout selected");
+                Intent signOutIntent = new Intent(this, MainActivity.class);
+                startActivity(signOutIntent);
+                Log.i("Status","Logout Selected");
                 break;
         }
         return false;

@@ -15,4 +15,5 @@
     <string name="openNavDrawer"> Navigation Drawer Open</string>
     <string name="closeNavDrawer"> Navigation Drawer Close</string>
     <string name="create_account">Create Account</string>
+    <string name="add_item_inventory">Add Item</string>
 </resources>
