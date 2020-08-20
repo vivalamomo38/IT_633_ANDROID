@@ -10,8 +10,6 @@ public class Item {
     private int thumbnail;
 
     /** Step 2: Constructors**/
-    public Item() {
-    }
 
     public Item(String itemName, int numOfItems, double unitPrice, String itemDescription, int thumbnail) {
         this.itemName = itemName;

@@ -16,4 +16,12 @@
     <string name="closeNavDrawer"> Navigation Drawer Close</string>
     <string name="create_account">Create Account</string>
     <string name="add_item_inventory">Add Item</string>
+    <string name="add_item_dialog_item_name">Item Name</string>
+    <string name="add_item_dialog_item_description">Item Description</string>
+    <string name="add_item_dialog_item_qty">Item Quantity</string>
+    <string name="add_item_dialog_item_ppu">Price per unit</string>
+    <string name="add_item_dialog_item_confirm">Confirm</string>
+    <string name="add_item_dialog_item_cancel">Cancel</string>
+
+
 </resources>

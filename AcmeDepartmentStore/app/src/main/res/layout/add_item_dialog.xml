@@ -5,13 +5,13 @@
     android:layout_height="wrap_content">
     <ImageView
         android:src="@drawable/add_item_btn"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:scaleType="center"
         android:background="#FFFFBB33"
         android:contentDescription="@string/app_name" />
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/itemName"
         android:inputType="textEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,10 +19,9 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:hint="@string/button_guest" />
+        android:hint="@string/add_item_dialog_item_name" />
     <EditText
-        android:id="@+id/password"
-        android:inputType="textPassword"
+        android:id="@+id/itemDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -30,5 +29,25 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="sans-serif"
-        android:hint="@string/button_login"/>
+        android:hint="@string/add_item_dialog_item_description"/>
+    <EditText
+        android:id="@+id/itemQty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="sans-serif"
+        android:hint="@string/add_item_dialog_item_qty"/>
+    <EditText
+        android:id="@+id/itemPPU"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="sans-serif"
+        android:hint="@string/add_item_dialog_item_ppu"/>
 </LinearLayout>

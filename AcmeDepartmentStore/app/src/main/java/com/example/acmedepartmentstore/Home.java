@@ -32,32 +32,27 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     private FirebaseFirestore _fireStore;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        Log.i("Activity Status","Start Home Activity Succeeded");
+
+
         // Initialize Firebase Instance
         mAuth = FirebaseAuth.getInstance();
         _fireStore = FirebaseFirestore.getInstance();
 
         // Test if user is logged in Else return to MAINACTIVITY
-        if(mAuth.getCurrentUser()==null){
-
-
-        }else{
-            Log.i("Status","Persisted session w/"+ " " + mAuth.getCurrentUser().getUid());
-        }
-
-        Log.i("Activity Status","Start Home Activity Succeeded");
-
+        if(mAuth.getCurrentUser()!=null){
+            Log.i("Status","Persisted session w/"+ " " + mAuth.getCurrentUser().getUid()); }
 
         // Gets user document from Firestore as reference to dynamically load user data
         try {
 
             sessionUser = mAuth.getCurrentUser();
-            sessionUserID = sessionUser.getUid();
+            sessionUserID = mAuth.getCurrentUser().getUid();
 
             _fireStore.collection("users").document(sessionUserID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
@@ -115,6 +110,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         switch(menuItem.getItemId()) {
             case R.id.nav_inventory:
                 Log.i("Inventory", "nav inventory selected");
+                Log.i("Inventory", sessionUserID);
                 Intent inventoryIntent = new Intent(Home.this, InventoryActivity.class);
                 inventoryIntent.putExtra("LoggedInUser.firstName", sessionFirstName);
                 inventoryIntent.putExtra("LoggedInUser.lastName", sessionFirstName);

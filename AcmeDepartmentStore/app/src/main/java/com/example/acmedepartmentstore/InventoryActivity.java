@@ -1,5 +1,7 @@
 package com.example.acmedepartmentstore;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -10,11 +12,12 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -23,6 +26,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.acmedepartmentstore.data.model.Item;
+import com.example.acmedepartmentstore.data.model.LoggedInUser;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -47,6 +51,8 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory);
 
+        Log.i("Status","Start Inventory Activity Succeeded");
+
         toolBar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolBar);
 
@@ -67,15 +73,21 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
 
         // Test that intent extras exist
         Bundle extras = getIntent().getExtras();
-        String userName;
+        String firstName;
+        String lastName;
+        String uID;
+        LoggedInUser sessionUser ;
 
-        // Implement try catch to solve reopen application bug
-        // Issue #1 on gitHub Repo
+        // Implement try catch to solve extra failures
         try {
             if (extras != null) {
-                userName = extras.getString("LoggedInUser.firstName");
+                firstName = extras.getString("LoggedInUser.firstName");
+                lastName = extras.getString("LoggedInUser.firstName");
+                uID = extras.getString("LoggedInUser.uID");
+
+               sessionUser = new LoggedInUser(uID,firstName,lastName,null);
+
                 Log.i("Extras", "Extras were passed");
-                Log.i("Extras", userName);
 
                 // Had to provide workaround here as, I couldn't setText to the original drawer layout
                 // See resolution code here --https://stackoverflow.com/questions/33199764/android-api-23-change-navigation-view-headerlayout-textview
@@ -84,14 +96,14 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
                 navigationView.addHeaderView(header);
                 TextView navUserName = (TextView) header.findViewById(R.id.nav_header_username);
 
-                navUserName.setText(userName);
+                navUserName.setText(firstName);
                 // Set NavBar UserName w/ Extra passed from Intent
 
 
             } else {
                 Log.i("Extras", "No Extras were passed");
             }
-        } catch (Exception e){}
+        } catch (Exception e){ Log.i("Extras", "Extras failed to pass correctly");}
         // Create Recycler View widget
         recyclerView = findViewById(R.id.inventory_recycler_view);
 
@@ -241,6 +253,8 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
     }
 
     public void addItemDialog(View view){
+
+
         // 1. Instantiate an AlertDialog.Builder with its constructor
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -248,19 +262,52 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
 
         LayoutInflater inflater = getLayoutInflater();
 
-        // 3. Inflate the layout
+        // 3. Inflate the layout and assign to a view for explicit reference
+        final View alertDialogView = inflater.inflate(R.layout.add_item_dialog, null);
 
-        builder.setView(inflater.inflate(R.layout.add_item_dialog, null))
+        builder.setView(alertDialogView)
                 // Add action buttons
-                .setPositiveButton(R.string.prompt_email, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.add_item_dialog_item_confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        // sign in the user ...
+                        // Log Test OnClick
+                       try{
+
+                           int[] newItemCover = new int[]{R.drawable.behr_interior_semi_gloss};
+
+                           EditText itemNameEditText = (EditText) alertDialogView.findViewById(R.id.itemName);
+                           EditText itemDescEditText = (EditText) alertDialogView.findViewById(R.id.itemDescription);
+                           EditText itemQtyEditText = (EditText) alertDialogView.findViewById(R.id.itemQty);
+                           EditText itemPPUEditText = (EditText) alertDialogView.findViewById(R.id.itemPPU);
+
+                           String newItemName = itemNameEditText.getText().toString();
+                           String newItemDesc = itemDescEditText.getText().toString();
+                           int newItemQty = Integer.parseInt(itemQtyEditText.getText().toString());
+                           double newItemPPU = Double.parseDouble(itemPPUEditText.getText().toString());
+
+                           Item newItem = new Item(newItemName, newItemQty,newItemPPU,newItemDesc,newItemCover[0]);
+
+                           itemList.add(newItem);
+                           itemAdapter.notifyDataSetChanged();
+
+
+                           Log.i("Status","Add Item succeeded for " + newItemName );
+
+                       } catch (Exception e){
+                           Log.i("Status","Add Item Failed");
+                           Context context = getApplicationContext();
+                           CharSequence text = "One of your entries was invalid!";
+                           int duration = Toast.LENGTH_SHORT;
+
+                           Toast toast = Toast.makeText(context, text, duration);
+                           toast.show();
+                       }
+                           Log.i("Status","Positive Button Selected");
                     }
                 })
-                .setNegativeButton(R.string.prompt_password, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.add_item_dialog_item_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                       //actions for negative
+                        //actions for negative
                     }
                 });
 
@@ -271,6 +318,8 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
 
         dialog.show();
 
+
+
     }
 
-}
+    }
