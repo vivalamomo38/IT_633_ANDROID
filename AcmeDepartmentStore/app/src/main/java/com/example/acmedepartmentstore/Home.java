@@ -12,12 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.acmedepartmentstore.data.model.LoggedInUser;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -32,8 +30,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     private String sessionLastName;
     private String sessionUserID;
     private FirebaseFirestore _fireStore;
-    private LoggedInUser loggedInUser;
-    private DocumentReference userDocument;
+
 
 
 
@@ -44,6 +41,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         // Initialize Firebase Instance
         mAuth = FirebaseAuth.getInstance();
         _fireStore = FirebaseFirestore.getInstance();
+
+        // Test if user is logged in Else return to MAINACTIVITY
+        if(mAuth.getCurrentUser()==null){
+
+
+        }else{
+            Log.i("Status","Persisted session w/"+ " " + mAuth.getCurrentUser().getUid());
+        }
 
         Log.i("Activity Status","Start Home Activity Succeeded");
 

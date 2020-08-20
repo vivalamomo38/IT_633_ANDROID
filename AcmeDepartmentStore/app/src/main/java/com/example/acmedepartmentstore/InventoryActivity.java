@@ -10,6 +10,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -21,7 +22,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.acmedepartmentstore.data.model.Inventory;
 import com.example.acmedepartmentstore.data.model.Item;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,7 +34,6 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
     private Toolbar toolBar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private Inventory sessionInventory;
 
     // Declare recycler view variables
     private List<Item> itemList;
@@ -42,7 +41,7 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
     private RecyclerView recyclerView;
 
 
-
+    // On create methods for InventoryActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,12 +69,29 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
         Bundle extras = getIntent().getExtras();
         String userName;
 
-        if (extras != null) {
-            userName = extras.getString("name");
-            Log.i("Extras","Extras were passed");
-            // and get whatever type user account id is
-        } else {Log.i("Extras","No Extras were passed");}
+        // Implement try catch to solve reopen application bug
+        // Issue #1 on gitHub Repo
+        try {
+            if (extras != null) {
+                userName = extras.getString("LoggedInUser.firstName");
+                Log.i("Extras", "Extras were passed");
+                Log.i("Extras", userName);
 
+                // Had to provide workaround here as, I couldn't setText to the original drawer layout
+                // See resolution code here --https://stackoverflow.com/questions/33199764/android-api-23-change-navigation-view-headerlayout-textview
+
+                View header = LayoutInflater.from(this).inflate(R.layout.nav_header_layout, null);
+                navigationView.addHeaderView(header);
+                TextView navUserName = (TextView) header.findViewById(R.id.nav_header_username);
+
+                navUserName.setText(userName);
+                // Set NavBar UserName w/ Extra passed from Intent
+
+
+            } else {
+                Log.i("Extras", "No Extras were passed");
+            }
+        } catch (Exception e){}
         // Create Recycler View widget
         recyclerView = findViewById(R.id.inventory_recycler_view);
 
@@ -95,6 +111,8 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
         InsertDataIntoCards();
 
     }
+
+    //Establish mock data and add to the itemList for testing
     private void InsertDataIntoCards() {
         // Add Card Data and display
 
@@ -106,7 +124,6 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
                 R.drawable.gg_glue,
                 R.drawable.phillips_head_screwdriver,
         };
-        //Establish mock data and add to the itemList for testing
 
         Item a = new Item("Screws", 100, 0.99, "3/4 inch screw",itemCovers[0]);
         itemList.add(a);
@@ -130,11 +147,12 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
         itemAdapter.notifyDataSetChanged();
 
     }
+
     // Navigation Bar Selection Logic
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-        // Switch Statement to determine menu item selected
+        // Switch Statement to determine nav menu item selected
         switch(menuItem.getItemId()) {
             case R.id.nav_inventory:
                 Log.i("Inventory", "nav inventory selected");
@@ -164,8 +182,7 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
                 startActivity(signOutIntent);
                 break;
         }
-        return false;
-    }
+        return false; }
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
