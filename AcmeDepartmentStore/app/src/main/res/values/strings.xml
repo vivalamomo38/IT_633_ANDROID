@@ -22,6 +22,11 @@
     <string name="add_item_dialog_item_ppu">Price per unit</string>
     <string name="add_item_dialog_item_confirm">Confirm</string>
     <string name="add_item_dialog_item_cancel">Cancel</string>
+    <string name="AddItemTextView">Add Inventory Items</string>
+    <string name="edit_item_dialog_item_save">Save</string>
+    <string name="edit_item_dialog_item_cancel">Cancel</string>
+    <string name="EditItemTextView">Edit Inventory Items</string>
+
 
 
 </resources>

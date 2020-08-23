@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +66,7 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
                 R.string.openNavDrawer,
                 R.string.closeNavDrawer
         );
+        
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
@@ -118,6 +120,21 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2,dpToPx(10),true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(itemAdapter);
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getApplicationContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        // do whatever
+                        Log.i("Status","Item Clicked" + position);
+
+                        //Implement show dialog for each item and load item data into textfields
+                        EditItemDialog(view,position);
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
 
         // prepare item cards
         InsertDataIntoCards();
@@ -129,6 +146,7 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
         // Add Card Data and display
 
         int[] itemCovers = new int[]{
+                R.drawable.comingsoon,
                 R.drawable.screw,
                 R.drawable.finish_nail,
                 R.drawable.behr_interior_semi_gloss,
@@ -137,22 +155,22 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
                 R.drawable.phillips_head_screwdriver,
         };
 
-        Item a = new Item("Screws", 100, 0.99, "3/4 inch screw",itemCovers[0]);
+        Item a = new Item("Screws", 100, 0.99, "3/4 inch screw",itemCovers[1]);
         itemList.add(a);
 
-         a = new Item("Nails", 1500, 0.63, "3/4 inch nails",itemCovers[1]);
+         a = new Item("Nails", 1500, 0.63, "3/4 inch nails",itemCovers[2]);
         itemList.add(a);
 
-        a = new Item("Behr Interior Semi-Gloss (White)", 1, 17.99, "1 Gl White Paint",itemCovers[2]);
+        a = new Item("Behr Interior Semi-Gloss (White)", 1, 17.99, "1 Gl White Paint",itemCovers[3]);
         itemList.add(a);
 
-        a = new Item("Krause & Becker PRO - Paint Brush", 3, 7.99, "Premium 3 inch width paint brush",itemCovers[3]);
+        a = new Item("Krause & Becker PRO - Paint Brush", 3, 7.99, "Premium 3 inch width paint brush",itemCovers[4]);
         itemList.add(a);
 
-        a = new Item("Gorilla Glue", 3, 3.99, "1.75 fl. oz. Tube Gorilla Glue",itemCovers[4]);
+        a = new Item("Gorilla Glue", 3, 3.99, "1.75 fl. oz. Tube Gorilla Glue",itemCovers[5]);
         itemList.add(a);
 
-        a = new Item("Phillips Screw Driver", 100, 22.99, "Stanley Phillips Screw Driver",itemCovers[5]);
+        a = new Item("Phillips Screw Driver", 100, 22.99, "Stanley Phillips Screw Driver",itemCovers[6]);
         itemList.add(a);
 
         //Notify data set changed
@@ -273,7 +291,7 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
                         // Log Test OnClick
                        try{
 
-                           int[] newItemCover = new int[]{R.drawable.behr_interior_semi_gloss};
+                           int[] newItemCover = new int[]{R.drawable.comingsoon};
 
                            EditText itemNameEditText = (EditText) alertDialogView.findViewById(R.id.itemName);
                            EditText itemDescEditText = (EditText) alertDialogView.findViewById(R.id.itemDescription);
@@ -286,6 +304,9 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
                            double newItemPPU = Double.parseDouble(itemPPUEditText.getText().toString());
 
                            Item newItem = new Item(newItemName, newItemQty,newItemPPU,newItemDesc,newItemCover[0]);
+
+                           ImageView imageView = recyclerView.findViewById(R.id.thumbnail);
+                           imageView.setImageDrawable (null);
 
                            itemList.add(newItem);
                            itemAdapter.notifyDataSetChanged();
@@ -306,6 +327,77 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
                     }
                 })
                 .setNegativeButton(R.string.add_item_dialog_item_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //actions for negative
+                    }
+                });
+
+
+
+// 3. Get the <code><a href="/reference/android/app/AlertDialog.html">AlertDialog</a></code> from <code><a href="/reference/android/app/AlertDialog.Builder.html#create()">create()</a></code>
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+
+
+
+    }
+
+
+    public void EditItemDialog(View view, int position){
+
+
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // 2. Get the layout inflater to inflate the custom view
+
+        LayoutInflater inflater = getLayoutInflater();
+
+        // 3. Inflate the layout and assign to a view for explicit reference
+        final View alertDialogView = inflater.inflate(R.layout.edit_item_dialog, null);
+
+        builder.setView(alertDialogView)
+                // Add action buttons
+                .setPositiveButton(R.string.edit_item_dialog_item_save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Log Test OnClick
+                        try{
+
+                            int[] newItemCover = new int[]{R.drawable.comingsoon};
+
+                            EditText itemNameEditText = (EditText) alertDialogView.findViewById(R.id.itemName);
+                            EditText itemDescEditText = (EditText) alertDialogView.findViewById(R.id.itemDescription);
+                            EditText itemQtyEditText = (EditText) alertDialogView.findViewById(R.id.itemQty);
+                            EditText itemPPUEditText = (EditText) alertDialogView.findViewById(R.id.itemPPU);
+
+                            String newItemName = itemNameEditText.getText().toString();
+                            String newItemDesc = itemDescEditText.getText().toString();
+                            int newItemQty = Integer.parseInt(itemQtyEditText.getText().toString());
+                            double newItemPPU = Double.parseDouble(itemPPUEditText.getText().toString());
+
+                            Item newItem = new Item(newItemName, newItemQty,newItemPPU,newItemDesc,newItemCover[0]);
+
+                            itemList.add(newItem);
+                            itemAdapter.notifyDataSetChanged();
+
+
+                            Log.i("Status","Add Item succeeded for " + newItemName );
+
+                        } catch (Exception e){
+                            Log.i("Status","Add Item Failed");
+                            Context context = getApplicationContext();
+                            CharSequence text = "One of your entries was invalid!";
+                            int duration = Toast.LENGTH_SHORT;
+
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.show();
+                        }
+                        Log.i("Status","Positive Button Selected");
+                    }
+                })
+                .setNegativeButton(R.string.edit_item_dialog_item_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //actions for negative
                     }

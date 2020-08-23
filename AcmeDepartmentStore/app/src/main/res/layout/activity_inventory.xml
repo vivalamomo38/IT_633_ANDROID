@@ -47,24 +47,39 @@
                     android:id="@+id/main_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/colorPrimary" />
+                    android:background="@color/colorPrimary"
+                    app:titleTextColor="#FFFFFF" />
 
 
-                <TextView
+                <ImageButton
                     android:id="@+id/addItemInventory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="32dp"
                     android:layout_marginBottom="32dp"
-                    android:background="@drawable/add_item_btn"
-                    android:drawableEnd="@drawable/ic_add_24px"
+                    android:background="@drawable/ic_add_24px"
+                    android:backgroundTint="#FDF8F8"
                     android:fontFamily="sans-serif-medium"
                     android:onClick="addItemDialog"
                     android:textAlignment="center"
                     android:textColorLink="#FFFFFF"
                     android:textSize="24sp"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="16dp"
+                    android:layout_toStartOf="@+id/addItemInventory"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@string/AddItemTextView"
+                    android:textColor="@color/colorBackground"
+                    android:textSize="14sp"
                     app:layout_constraintTop_toTopOf="parent" />
             </RelativeLayout>
         </com.google.android.material.appbar.AppBarLayout>

@@ -21,13 +21,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
     private List<Item> itemList;
 
 
-
     /** Step1: MyView holder Class**/
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         public TextView itemName,numOfItems;
         public ImageView thumbnail;
+        public final View.OnClickListener myClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        };
 
 
 
@@ -77,6 +81,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
 
 
     }
+
 
     @Override
     public int getItemCount() {
