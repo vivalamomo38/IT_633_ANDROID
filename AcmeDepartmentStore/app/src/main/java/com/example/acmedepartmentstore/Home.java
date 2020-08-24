@@ -50,17 +50,21 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         // Gets user document from Firestore as reference to dynamically load user data
         try {
-
-            sessionUser = mAuth.getCurrentUser();
+                       sessionUser = mAuth.getCurrentUser();
             sessionUserID = mAuth.getCurrentUser().getUid();
 
             _fireStore.collection("users").document(sessionUserID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     if (documentSnapshot!=null) {
-
-                        sessionFirstName = documentSnapshot.getString("firstName");
-                        sessionLastName = documentSnapshot.getString("lastName");
+                    // Edit for no DB calls to create user first name last name in navigation view - set user name to null for null pointer
+                        if(sessionFirstName != null && sessionLastName !=null ){
+                            sessionFirstName = documentSnapshot.getString("firstName");
+                            sessionLastName = documentSnapshot.getString("lastName");
+                        }else{
+                            sessionFirstName = "Welcome!";
+                            sessionLastName = "New User";
+                        }
 
                         Log.i("Status","Session user is: "+ sessionFirstName +" "+ sessionLastName);
 

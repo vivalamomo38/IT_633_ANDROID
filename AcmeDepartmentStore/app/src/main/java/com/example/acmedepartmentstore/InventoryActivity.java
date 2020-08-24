@@ -127,7 +127,7 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
                         Log.i("Status","Item Clicked" + position);
 
                         //Implement show dialog for each item and load item data into textfields
-                        EditItemDialog(view,position);
+                        viewItemDialog(view,position);
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
@@ -214,11 +214,8 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
         }
         return false; }
 
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
 
-    }
-
+    // class to handle the grid spacing
     private class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
         private int spanCount;
@@ -270,6 +267,7 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dp,r.getDisplayMetrics()));
     }
 
+    //Method to show the add item dialog
     public void addItemDialog(View view){
 
 
@@ -343,8 +341,48 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
 
     }
 
+    // Method to delete inventory item from the itemlist
+    public void deleteItem(int itemPosition){
+        itemList.remove(itemPosition);
+        itemAdapter.notifyDataSetChanged();
 
-    public void EditItemDialog(View view, int position){
+    }
+
+    // Method to save edits to an inventory item - needs improvement and DB Calls
+    public void saveUpdatedItem(int itemPosition, Item item){
+        itemList.remove(itemPosition);
+        itemList.add(item);
+        itemAdapter.notifyDataSetChanged();
+
+    }
+
+    // Method to confirm the item delete
+    public void deleteItemDialog (final int itemPosition){
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Inventory Item")
+                .setMessage("Do you really want to remove this Item?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        try{
+                            deleteItem(itemPosition);
+                        Toast.makeText(getApplicationContext(), "Yay! Inventory Cleaned!", Toast.LENGTH_SHORT).show();}
+                        catch (Exception e){
+                            Log.i("Status","Item Delete Failed");
+                            Toast.makeText(getApplicationContext(), "Oops! Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                    }})
+                .setNegativeButton(android.R.string.no, null).show();
+    }
+
+    // Method to show the item details on click
+    public void viewItemDialog(View view, final int position){
+        // Get item to load into the inflated dialog
+        Item viewItem = itemList.get(position);
+
+        Log.i("Status",viewItem.getItemName() + " has been selected");
 
 
         // 1. Instantiate an AlertDialog.Builder with its constructor
@@ -354,58 +392,119 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
 
         LayoutInflater inflater = getLayoutInflater();
 
+
         // 3. Inflate the layout and assign to a view for explicit reference
         final View alertDialogView = inflater.inflate(R.layout.edit_item_dialog, null);
 
+        final EditText itemNameEditText = (EditText) alertDialogView.findViewById(R.id.itemName);
+        final EditText itemDescEditText = (EditText) alertDialogView.findViewById(R.id.itemDescription);
+        final EditText itemQtyEditText = (EditText) alertDialogView.findViewById(R.id.itemQty);
+        final EditText itemPPUEditText = (EditText) alertDialogView.findViewById(R.id.itemPPU);
+        // Load data from selected item into Dialog Views
+
+        itemNameEditText.setText(viewItem.getItemName());
+        itemDescEditText.setText(viewItem.getItemDescription());
+        itemQtyEditText.setText(String.valueOf(viewItem.getNumOfItems()));
+        itemPPUEditText.setText(String.valueOf(viewItem.getUnitPrice()));
+
+        // Set TextViews to not editable until edit button clicked
+        itemNameEditText.setEnabled(false);
+        itemDescEditText.setEnabled(false);
+        itemQtyEditText.setEnabled(false);
+        itemPPUEditText.setEnabled(false);
+
+
+        //
+
+
         builder.setView(alertDialogView)
                 // Add action buttons
-                .setPositiveButton(R.string.edit_item_dialog_item_save, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.edit_item_dialog_item_edit, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        // Log Test OnClick
-                        try{
-
-                            int[] newItemCover = new int[]{R.drawable.comingsoon};
-
-                            EditText itemNameEditText = (EditText) alertDialogView.findViewById(R.id.itemName);
-                            EditText itemDescEditText = (EditText) alertDialogView.findViewById(R.id.itemDescription);
-                            EditText itemQtyEditText = (EditText) alertDialogView.findViewById(R.id.itemQty);
-                            EditText itemPPUEditText = (EditText) alertDialogView.findViewById(R.id.itemPPU);
-
-                            String newItemName = itemNameEditText.getText().toString();
-                            String newItemDesc = itemDescEditText.getText().toString();
-                            int newItemQty = Integer.parseInt(itemQtyEditText.getText().toString());
-                            double newItemPPU = Double.parseDouble(itemPPUEditText.getText().toString());
-
-                            Item newItem = new Item(newItemName, newItemQty,newItemPPU,newItemDesc,newItemCover[0]);
-
-                            itemList.add(newItem);
-                            itemAdapter.notifyDataSetChanged();
-
-
-                            Log.i("Status","Add Item succeeded for " + newItemName );
-
-                        } catch (Exception e){
-                            Log.i("Status","Add Item Failed");
-                            Context context = getApplicationContext();
-                            CharSequence text = "One of your entries was invalid!";
-                            int duration = Toast.LENGTH_SHORT;
-
-                            Toast toast = Toast.makeText(context, text, duration);
-                            toast.show();
-                        }
-                        Log.i("Status","Positive Button Selected");
+                    public void onClick(DialogInterface dialog, int which) {
+                        editItemDialog(position);
                     }
-                })
-                .setNegativeButton(R.string.edit_item_dialog_item_cancel, new DialogInterface.OnClickListener() {
+                }).setNegativeButton(R.string.edit_item_dialog_item_delete, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //actions for negative
+                        dialog.dismiss();
+                        deleteItemDialog(position);
+
                     }
                 });
 
 
 
-// 3. Get the <code><a href="/reference/android/app/AlertDialog.html">AlertDialog</a></code> from <code><a href="/reference/android/app/AlertDialog.Builder.html#create()">create()</a></code>
+// 3. Show the Alert Dialog and set custom onclicklistener to allow user to edit the data
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+
+
+
+    }
+
+    // Create method to show edit view of item
+    public void editItemDialog(final int position){
+        // Get item to load into the inflated dialog
+        final Item viewItem = itemList.get(position);
+        final Item[] editItem = new Item[1];
+
+        Log.i("Status",viewItem.getItemName() + " has been selected for editing");
+
+
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // 2. Get the layout inflater to inflate the custom view
+
+        LayoutInflater inflater = getLayoutInflater();
+
+
+        // 3. Inflate the layout and assign to a view for explicit reference
+        final View alertDialogView = inflater.inflate(R.layout.edit_item_dialog, null);
+
+        final EditText itemNameEditText = (EditText) alertDialogView.findViewById(R.id.itemName);
+        final EditText itemDescEditText = (EditText) alertDialogView.findViewById(R.id.itemDescription);
+        final EditText itemQtyEditText = (EditText) alertDialogView.findViewById(R.id.itemQty);
+        final EditText itemPPUEditText = (EditText) alertDialogView.findViewById(R.id.itemPPU);
+        final int itemThumbnail = viewItem.getThumbnail();
+        // Load data from selected item into Dialog Views
+
+        itemNameEditText.setText(viewItem.getItemName());
+        itemDescEditText.setText(viewItem.getItemDescription());
+        itemQtyEditText.setText(String.valueOf(viewItem.getNumOfItems()));
+        itemPPUEditText.setText(String.valueOf(viewItem.getUnitPrice()));
+
+        builder.setView(alertDialogView)
+                // Add action buttons
+                .setPositiveButton(R.string.edit_item_dialog_item_save,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                String newItemName = itemNameEditText.getText().toString();
+                                String newItemDesc = itemDescEditText.getText().toString();
+                                int newItemQty = Integer.parseInt(itemQtyEditText.getText().toString());
+                                double newItemPPU = Double.parseDouble(itemPPUEditText.getText().toString());
+                                int newItemThumbnail = itemList.get(position).getThumbnail();
+
+                                editItem[0] = new Item(newItemName,newItemQty,newItemPPU,newItemDesc,newItemThumbnail);
+
+
+                                saveUpdatedItem(position, editItem[0]);
+                            }
+                        }).setNegativeButton(R.string.edit_item_dialog_item_cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //actions for negative
+                dialog.dismiss(); }
+        });
+
+
+
+// 3. Show the Alert Dialog and set custom onclicklistener to allow user to edit the data
+
         AlertDialog dialog = builder.create();
 
         dialog.show();
