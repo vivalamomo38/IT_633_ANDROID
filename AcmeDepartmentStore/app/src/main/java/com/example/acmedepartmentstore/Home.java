@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -142,6 +143,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 try{
                     FirebaseAuth mAuth = FirebaseAuth.getInstance();
                     mAuth.signOut();
+                    Toast toast = Toast.makeText(this, "Logout Processed", Toast.LENGTH_SHORT);
+                    toast.show();
                 }catch(Exception e){Log.i("Status","No user to sign out");}
                 Intent signOutIntent = new Intent(this, MainActivity.class);
                 startActivity(signOutIntent);

@@ -207,6 +207,8 @@ public class InventoryActivity extends AppCompatActivity implements NavigationVi
                 try{
                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
                     mAuth.signOut();
+                    Toast toast = Toast.makeText(this, "Logout Processed", Toast.LENGTH_SHORT);
+                    toast.show();
                 }catch(Exception e){Log.i("Status","No user to sign out");}
                 Intent signOutIntent = new Intent(this, MainActivity.class);
                 startActivity(signOutIntent);
